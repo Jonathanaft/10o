@@ -1,163 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>10o Encryption</title>
-<style>
-body{
-    background:#111;
-    color:#0f0;
-    font-family:monospace;
-    padding:20px;
-}
-textarea,input{
-    width:100%;
-    margin:10px 0;
-    padding:10px;
-    background:#222;
-    color:#0f0;
-    border:1px solid #0f0;
-}
-button{
-    padding:10px 20px;
-    margin:5px;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="0; url=https://dancing-muffin-31a626.netlify.app/">
+    <title>Redirecting...</title>
+
+    <script>
+        window.location.replace("https://dancing-muffin-31a626.netlify.app/");
+    </script>
 </head>
 <body>
-
-<h2>10o Encryption Demo</h2>
-
-<input id="key" placeholder="Secret Key">
-
-<textarea id="plain" rows="8" placeholder="Message"></textarea>
-
-<button onclick="encrypt()">Encrypt</button>
-<button onclick="decrypt()">Decrypt</button>
-
-<textarea id="output" rows="8" placeholder="Output"></textarea>
-
-<script>
-
-function hashKey(key){
-
-    let h = 2166136261;
-
-    for(let i=0;i<key.length;i++){
-
-        h ^= key.charCodeAt(i);
-
-        h = Math.imul(h,16777619);
-
-    }
-
-    return h>>>0;
-
-}
-
-function rotl(x,b){
-
-    return ((x<<b)|(x>>(8-b)))&255;
-
-}
-
-function rotr(x,b){
-
-    return ((x>>b)|(x<<(8-b)))&255;
-
-}
-
-function encrypt(){
-
-    let text=document.getElementById("plain").value;
-
-    let key=document.getElementById("key").value;
-
-    let seed=hashKey(key);
-
-    let out=[];
-
-    for(let i=0;i<text.length;i++){
-
-        let c=text.charCodeAt(i);
-
-        let k=(seed>>(8*(i%4)))&255;
-
-        c ^= k;
-
-        c=rotl(c,(i%7)+1);
-
-        c=(c+(i*17)+k)%256;
-
-        c ^= ((i*31)^k)&255;
-
-        out.push(c);
-
-    }
-
-    // Reverse
-
-    out.reverse();
-
-    // Second round
-
-    for(let i=0;i<out.length;i++){
-
-        out[i]=rotl(out[i]^((seed+i)&255),3);
-
-    }
-
-    let str=String.fromCharCode(...out);
-
-    document.getElementById("output").value=btoa(str);
-
-}
-
-function decrypt(){
-
-    let enc=document.getElementById("output").value;
-
-    let key=document.getElementById("key").value;
-
-    let seed=hashKey(key);
-
-    let arr=[...atob(enc)].map(c=>c.charCodeAt(0));
-
-    for(let i=0;i<arr.length;i++){
-
-        arr[i]=rotr(arr[i],3);
-
-        arr[i]^=((seed+i)&255);
-
-    }
-
-    arr.reverse();
-
-    let out=[];
-
-    for(let i=0;i<arr.length;i++){
-
-        let k=(seed>>(8*(i%4)))&255;
-
-        let c=arr[i];
-
-        c ^= ((i*31)^k)&255;
-
-        c=(c-(i*17)-k+2560)%256;
-
-        c=rotr(c,(i%7)+1);
-
-        c ^= k;
-
-        out.push(String.fromCharCode(c));
-
-    }
-
-    document.getElementById("plain").value=out.join("");
-
-}
-
-</script>
-
+    <p>
+        Redirecting...
+        If you're not redirected automatically,
+        <a href="https://dancing-muffin-31a626.netlify.app/">click here</a>.
+    </p>
 </body>
 </html>
