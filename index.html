@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>10O Encryption</title>
+</head>
+<body>
+
+<h1>10O Encryption</h1>
+
+<p>Text</p>
+<textarea id="text" rows="10" cols="80"></textarea>
+
+<p>Password</p>
+<input type="password" id="password">
+
+<br><br>
+
+<button onclick="encrypt()">Encrypt</button>
+<button onclick="decrypt()">Decrypt</button>
+
+<h3>Output</h3>
+<textarea id="output" rows="10" cols="80" readonly></textarea>
+
+<script>
+
+// ---------- 10O Encryption ----------
+
+// Create a numeric key from password
+function makeKey(password){
+
+    let key = 123456789;
+
+    for(let i=0;i<password.length;i++){
+
+        key += password.charCodeAt(i)*(i+1);
+
+        key ^= key<<5;
+        key ^= key>>7;
+        key ^= key<<11;
+
+        key >>>=0;
+
+    }
+
+    return key;
+
+}
+
+// Random number generator
+function next(seed){
+
+    seed ^= seed<<13;
+    seed ^= seed>>17;
+    seed ^= seed<<5;
+
+    return seed>>>0;
+
+}
+
+// Encrypt
+function encrypt(){
+
+    let text=document.getElementById("text").value;
+    let pass=document.getElementById("password").value;
+
+    if(pass==""){
+        alert("Enter a password.");
+        return;
+    }
+
+    let seed=makeKey(pass);
+
+    let out="10O:";
+
+    for(let i=0;i<text.length;i++){
+
+        seed=next(seed);
+
+        let r=seed&255;
+
+        let c=text.charCodeAt(i);
+
+        c^=r;
+        c=(c+(i*17))&255;
+
+        out+=c.toString(16).padStart(2,"0");
+
+    }
+
+    document.getElementById("output").value=out;
+
+}
+
+// Decrypt
+function decrypt(){
+
+    let data=document.getElementById("text").value.trim();
+    let pass=document.getElementById("password").value;
+
+    if(!data.startsWith("10O:")){
+        alert("Not a 10O encrypted message.");
+        return;
+    }
+
+    data=data.substring(4);
+
+    let seed=makeKey(pass);
+
+    let out="";
+
+    for(let i=0;i<data.length;i+=2){
+
+        seed=next(seed);
+
+        let r=seed&255;
+
+        let c=parseInt(data.substr(i,2),16);
+
+        c=(c-((i/2)*17));
+
+        while(c<0)c+=256;
+
+        c^=r;
+
+        out+=String.fromCharCode(c);
+
+    }
+
+    document.getElementById("output").value=out;
+
+}
+
+</script>
+
+</body>
+</html>
